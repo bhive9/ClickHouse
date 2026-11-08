@@ -2,6 +2,7 @@
 -- and key lookups by the set that this test checks do not happen.
 SET max_bytes_before_external_set = 0;
 
+SET min_marks_per_part_to_load_statistics = 0;
 SET use_statistics_for_part_pruning = 0;
 SET use_query_cache = 0, use_query_condition_cache = 0;
 SET materialize_statistics_on_insert = 1, max_threads = 1;

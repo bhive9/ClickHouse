@@ -8,6 +8,8 @@
 -- `use_statistics_for_part_pruning`; without materialized statistics the parts carry no min/max to prune
 -- with, and without the last one the pruning under test never runs, so the counts below all come back 0.
 SET use_statistics = 1, materialize_statistics_on_insert = 1, use_statistics_for_part_pruning = 1;
+-- The tables are small, so use statistics regardless of the size of the read.
+SET min_marks_per_part_to_load_statistics = 0;
 
 SELECT nan IN (nan), nan = nan;
 
