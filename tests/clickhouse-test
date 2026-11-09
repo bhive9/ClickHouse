@@ -2429,6 +2429,22 @@ class SettingsRandomizer:
         # "use_skip_indexes_for_disjunctions_max_rpn_elements": lambda: random.choice([1, 8, 128, 1000]),
         # A tiny initial tail forces a second read of the Parquet footer
         "input_format_parquet_footer_read_size": lambda: random.choice([0, 1, 1024, 65536]),
+        # Read MergeTree through the background I/O pool, another way to read the same bytes.
+        "allow_asynchronous_read_from_io_pool_for_merge_tree": lambda: random.randint(0, 1),
+        # The Cloud default: cancel a read-only HTTP query when its client disconnects.
+        "cancel_http_readonly_queries_on_client_close": lambda: random.randint(0, 1),
+        # Now and then ignore the server's concurrency control, oversubscribing the threads.
+        "use_concurrency_control": lambda: random.random() > 0.1,
+        # Spill aggregation, sorting, `DISTINCT` and hash joins when the query is under memory pressure.
+        "enable_adaptive_memory_spill_scheduler": lambda: random.random() < 0.3,
+        # Profiler signals up to 100 times more often than the default 1 s interrupt every query
+        # thread (MemorySanitizer builds have no query profiler).
+        "query_profiler_real_time_period_ns": lambda: random.choice(
+            [1_000_000_000, 100_000_000, 10_000_000]
+        ),
+        "query_profiler_cpu_time_period_ns": lambda: random.choice(
+            [1_000_000_000, 100_000_000, 10_000_000]
+        ),
     }
 
     dependent_settings = {
