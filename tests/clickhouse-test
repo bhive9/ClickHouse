@@ -2428,8 +2428,9 @@ class SettingsRandomizer:
         # "use_skip_indexes_for_disjunctions_max_rpn_elements": lambda: random.choice([1, 8, 128, 1000]),
         # A tiny initial tail forces a second read of the Parquet footer
         "input_format_parquet_footer_read_size": lambda: random.choice([0, 1, 1024, 65536]),
-        # Read MergeTree through the background I/O pool, another way to read the same bytes.
-        "allow_asynchronous_read_from_io_pool_for_merge_tree": lambda: random.randint(0, 1),
+        # Read MergeTree through the background I/O pool. Disabled: with `max_streams_for_merge_tree_reading`
+        # of the test profile it reads with up to 1000 streams, which changes plans, threads and rows read everywhere.
+        # "allow_asynchronous_read_from_io_pool_for_merge_tree": lambda: random.randint(0, 1),
         # The Cloud default: cancel a read-only HTTP query when its client disconnects.
         "cancel_http_readonly_queries_on_client_close": lambda: random.randint(0, 1),
         # Now and then ignore the server's concurrency control, oversubscribing the threads.

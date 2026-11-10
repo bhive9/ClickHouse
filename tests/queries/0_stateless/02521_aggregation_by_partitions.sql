@@ -7,8 +7,6 @@ SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injectio
 set max_threads = 16;
 set allow_aggregate_partitions_independently = 1;
 set force_aggregate_partitions_independently = 1;
--- Reading through the I/O pool raises the number of read streams.
-SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 -- Aggregating each partition independently skips the merge phase where the global
 -- `max_rows_to_group_by` limit is enforced, so the optimization falls back to normal aggregation
 -- whenever that limit is set. The stateless test profile (tests/config/users.d/limits.yaml) sets a

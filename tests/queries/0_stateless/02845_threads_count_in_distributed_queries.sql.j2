@@ -7,8 +7,6 @@ SET max_threads=5, async_socket_for_remote=1, prefer_localhost_replica=1, optimi
 
 -- we do not want concurrency control to limit the number of threads
 SET use_concurrency_control=0;
--- reading through the I/O pool raises the number of read streams, and so of threads
-SET allow_asynchronous_read_from_io_pool_for_merge_tree=0;
 
 -- we use query_thread_log to check peak thread usage
 -- after https://github.com/ClickHouse/ClickHouse/issues/53417 there is a simpler way to check it
