@@ -12,6 +12,8 @@ INSERT INTO t_small_read_join SELECT number, 1 FROM numbers(10);
 
 SET max_threads = 4, max_threads_min_free_memory_per_thread = 0;
 SET merge_tree_read_split_ranges_into_intersecting_and_non_intersecting_injection_probability = 0;
+-- Reading through the I/O pool raises the number of read streams.
+SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 SET use_columns_cache = 0;
 
 SELECT count(), sum(rows), sum(marks) FROM system.parts WHERE database = currentDatabase() AND table = 't_small_read' AND active;

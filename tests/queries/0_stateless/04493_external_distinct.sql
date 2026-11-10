@@ -1,5 +1,7 @@
 -- Isolate from the default ratio threshold: the spill must be triggered only by the explicit settings.
 SET max_bytes_ratio_before_external_distinct = 0;
+-- The adaptive spill scheduler installs the spillable transform without a threshold.
+SET enable_adaptive_memory_spill_scheduler = 0;
 
 -- The result of `DISTINCT` with the spill must be identical to the in-memory result.
 SELECT count(), sum(cityHash64(k)) FROM (SELECT DISTINCT number % 300000 AS k FROM numbers_mt(3000000)) SETTINGS max_bytes_before_external_distinct = 0;

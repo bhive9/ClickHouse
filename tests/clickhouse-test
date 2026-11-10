@@ -2438,13 +2438,19 @@ class SettingsRandomizer:
         # Spill aggregation, sorting, `DISTINCT` and hash joins when the query is under memory pressure.
         "enable_adaptive_memory_spill_scheduler": lambda: random.random() < 0.3,
         # Profiler signals up to 100 times more often than the default 1 s interrupt every query
-        # thread (MemorySanitizer builds have no query profiler).
+        # thread. MemorySanitizer builds reject any non-zero period, see `msan_rejected_settings`.
         "query_profiler_real_time_period_ns": lambda: random.choice(
             [1_000_000_000, 100_000_000, 10_000_000]
         ),
         "query_profiler_cpu_time_period_ns": lambda: random.choice(
             [1_000_000_000, 100_000_000, 10_000_000]
         ),
+    }
+
+    # A MemorySanitizer build has no query profiler and throws `NOT_IMPLEMENTED` on a non-zero period.
+    msan_rejected_settings = {
+        "query_profiler_real_time_period_ns",
+        "query_profiler_cpu_time_period_ns",
     }
 
     dependent_settings = {
@@ -2526,8 +2532,11 @@ class SettingsRandomizer:
     def get_random_settings(args, tags):
         random_settings = {}
         is_debug = BuildFlags.DEBUG in args.build_flags
+        is_msan = BuildFlags.MEMORY in args.build_flags
         for setting, generator in SettingsRandomizer.settings.items():
             if setting in SettingsRandomizer.stress_test_only_settings and not args.stress_tests:
+                continue
+            if is_msan and setting in SettingsRandomizer.msan_rejected_settings:
                 continue
             if (
                 is_debug

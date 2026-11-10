@@ -12,6 +12,8 @@ SET query_plan_optimize_join_order_limit = 10;
 SET query_plan_join_swap_table = 0;
 SET query_plan_join_shard_by_pk_ranges = 0;
 SET enable_parallel_replicas = 0;
+-- Reading through the I/O pool raises the number of read streams.
+SET allow_asynchronous_read_from_io_pool_for_merge_tree = 0;
 SET automatic_parallel_replicas_mode = 0;
 SET enable_join_runtime_filters = 0;
 SET collect_hash_table_stats_during_joins = 0;
